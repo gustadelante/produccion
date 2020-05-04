@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+DATE_INPUT_FORMATS = ['%d-%m-%Y']
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,7 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'bajadas',
+    'items',
 ]
+
+GRAPHENE = {
+    'SCHEMA': 'gql.schema.schema'
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
