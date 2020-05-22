@@ -2,6 +2,7 @@ import graphene
 from items.models import Movie
 from bajadas.models import bajada
 from graphene_django.types import DjangoObjectType
+from graphql import GraphQLError
 
 class BajadaType(DjangoObjectType):
     class Meta:
@@ -39,7 +40,7 @@ class CreateBajada(graphene.Mutation):
         user = info.context.user
 
         if user.is_anonymous:
-            raise Exception('Log in para agregar bajada.')
+            raise GraphQLError('Log in para agregar bajada.')
         
         bajada1 = bajada(ancho=ancho, diametro=diametro, gramaje=gramaje, peso=peso, 
         bobinanro=bobinanro, ofnro=ofnro, turno=turno, calidad=calidad, usuariocreacion=user)
@@ -67,9 +68,9 @@ class UpdateBajada(graphene.Mutation):
         bajada2 = bajada.objects.get(id=bajada_id)
 
         #if bajada.usuariocreacion != user:
-        #    raise Exception('No permitido usuario diferente.')
-        #if user.is_anonymous:
-        #    raise Exception('Log in para agregar bajada.')
+        #    raise GraphQLError('No permitido usuario diferente.')
+        if user.is_anonymous:
+            raise GraphQLError('Log in para actualizar bajada.')
 
         bajada2.ancho = ancho
         bajada2.diametro = diametro
@@ -93,9 +94,10 @@ class DeleteBajada(graphene.Mutation):
     def mutate(self, info, bajada_id):
         user = info.context.user
         bajada3 = bajada.objects.get(id=bajada_id)
-
-        #if user.is_anonymous:
-        #    raise Exception('Log in para agregar bajada.')
+        
+        # descomentar para validar que el usuario este logueado
+        if user.is_anonymous:
+            raise GraphQLError('Log in para borrar bajada.')
 
         bajada3.delete()
 
