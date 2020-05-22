@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 class bajada(models.Model):
@@ -13,6 +14,9 @@ class bajada(models.Model):
     turno = models.CharField(max_length=1)
     calidad = models.IntegerField(null=True)
     fechacreacion = models.DateTimeField(auto_now_add=True)
+    usuariocreacion = models.ForeignKey(get_user_model(), null=True, on_delete=models.CASCADE)
+    fechaultmod = models.DateTimeField(auto_now_add=True)
+    usuarioultmod = None 
 
 class Meta:
     ordering = ["-id"]
